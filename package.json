@@ -1,0 +1,24 @@
+{
+  "name": "bao-tin-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend run dev --",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start --",
+    "lint": "npm --prefix frontend run lint",
+    "typecheck": "npm --prefix frontend run typecheck",
+    "test:accounting": "npm --prefix frontend run test:accounting",
+    "test:admin": "npm --prefix frontend run test:admin",
+    "test:sales": "npm --prefix frontend run test:sales",
+    "test:approvals": "npm --prefix frontend run test:approvals",
+    "test:warehouse": "npm --prefix frontend run test:warehouse",
+    "test:ui": "npm --prefix frontend run test:ui",
+    "test:menu": "npm --prefix frontend run test:menu",
+    "test:cards": "npm --prefix frontend run test:cards",
+    "test:images": "npm --prefix frontend run test:images",
+    "test:home-locks": "npm --prefix frontend run test:home-locks",
+    "test:detail": "npm --prefix frontend run test:detail",
+    "qa:ui": "npm --prefix frontend run qa:ui"
+  }
+}
