@@ -24,7 +24,7 @@ Kiem thu browser voi server dang chay:
 ```sh
 # Backend repo cloned ben canh FE repo, local test DB + dev:local API
 # KHONG chay voi API tro den Supabase
-QA_BACKEND_DIR=../../baotin-b2b-be/backend npm run test:connected
+QA_BACKEND_DIR=../../baotin-b2b-be npm run test:connected
 # Cac QA ben duoi chi cho API_MODE=false
 QA_BASE_URL=http://localhost:3010 npm run test:accounting
 QA_BASE_URL=http://localhost:3010 npm run test:admin
@@ -35,7 +35,8 @@ QA_BASE_URL=http://localhost:3010 npm run test:ui
 ```
 
 Lan dau can cai Chromium: `npx playwright install chromium`.
-QA_BACKEND_DIR la duong dan toi backend/ co dependencies va .env.local.
+QA_BACKEND_DIR la duong dan toi GOC repo BE co dependencies va .env.local;
+package.json/src/media nam ngay tai goc BE, khong con folder backend/ trung gian.
 Co the bo bien nay trong workspace cu co backend/ canh frontend/.
 Khong chay build va dev tren cung distDir. Preview rieng:
 `NEXT_DIST_DIR=.next-preview npm run dev -- --port 3010`.

@@ -4,37 +4,40 @@ Cap nhat 04/10/2026. Stack theo yeu cau: NestJS, TypeScript, TypeORM
 synchronize, Supabase PostgreSQL, JWT; seed mock cu va luu anh tren backend.
 Giu giao dien frontend. Tai lieu nay thay hien trang preview trong api-handoff.md.
 Tu 05/10/2026, source backend nam trong repo baotin-b2b-be; repo baotin-b2b-fe
-chi chua frontend/, shared/ va docs/design. Duong dan backend/ trong tai lieu
-la duong dan tu repo BE (hoac workspace local), khong phai file duoc push len FE.
+chi chua frontend/, shared/ va docs/design. Trong repo BE, src/, media/,
+scripts/, seed/, certs/, test/ va package.json nam tai GOC repo, khong con
+backend/ trung gian. Workspace local cu van co backend/ ignored; duong dan
+source BE ben duoi tinh tu goc repo BE, khong phai file duoc push len FE.
 
 ## Ket Noi Va Chay
 
 API hien dung Supabase **Session pooler** port 5432 theo URL nguoi dung
-cung cap, luu rieng trong backend/.env ignored (mode 600). TLS da xac minh
+cung cap, luu rieng trong .env cua BE ignored (mode 600; workspace cu dung
+backend/.env). TLS da xac minh
 CA + hostname, DB_SSL=true, DB_SSL_CA_FILE=./certs/prod-ca-2021.crt; khong
 tat verify. CA cong khai tai tu URL dashboard chinh thuc, provenance va
-fingerprint trong backend/certs/README.md.
+fingerprint trong certs/README.md cua BE.
 Schema baotin_app ban dau khong co bang; TypeORM da synchronize 11 bang,
 seed 63 products, 8 categories, 7 customers, 18 orders, 3 approvals va
 12 users. Khong thay doi public/auth/storage.
 Supabase direct host khong truy cap duoc tu mang may nay; khong can direct
-host khi da dung Session pooler. backend/.env.local va PostgreSQL
+host khi da dung Session pooler. .env.local cua BE va PostgreSQL
 127.0.0.1:5441/baotin_dev van giu rieng cho integration tests.
 Doc: https://supabase.com/docs/guides/database/connecting-to-postgres
 
-Chay backend theo https://github.com/thien-dev-77/baotin-b2b-be/blob/main/backend/README.md.
+Chay backend tai goc repo theo https://github.com/thien-dev-77/baotin-b2b-be/blob/main/README.md.
 Frontend/.env.local theo .env.example:
 NEXT_PUBLIC_API_MODE=true, BACKEND_URL=http://127.0.0.1:4000.
 Root `npm run dev -- --port 3010`; API localhost:4000/api/health.
 Next proxy /api/backend/* -> /api/* va images/media. Khong public DB/JWT env.
 Backend hien bind 127.0.0.1, deploy container can cau hinh bind/proxy rieng.
-API_MODE=false la preview cu; anh van can backend/media. Khong tu fallback
+API_MODE=false la preview cu; anh van can media server cua BE. Khong tu fallback
 mock khi API loi; doi NEXT_PUBLIC_* can restart/rebuild frontend.
 
 ## Cau Truc Va Seed
 
-- backend/src/database: DataSource, entities va SeedService.
-- backend/src/auth/catalog/orders/admin/account/media: modules nghiep vu.
+- BE src/database: DataSource, entities va SeedService.
+- BE src/auth/catalog/orders/admin/account/media: modules nghiep vu.
 - shared/: types, pricing va rules Sales/approval/warehouse/accounting.
 - frontend/lib/api-client.ts: fetch same-origin, cookie, errors.
 - frontend/lib/server-api.ts: product SSR, hidden SKU 404.
@@ -51,8 +54,9 @@ payload JSONB giu contract mock. Chua normalized ledger/FK day du.
 Commands validate references va transaction tren server.
 
 63 SKU, 8 categories, 7 B2B customers, 18 orders, 3 approvals export tu
-frontend/lib/catalog.ts va admin-preview.ts bang `npm --prefix backend run
-fixtures`. INSERT ON CONFLICT DO NOTHING, khong overwrite khi restart,
+frontend/lib/catalog.ts va admin-preview.ts bang
+`FRONTEND_DIR=../baotin-b2b-fe/frontend npm run fixtures` tai goc BE.
+INSERT ON CONFLICT DO NOTHING, khong overwrite khi restart,
 khong lay localStorage lam seed; seed bi cam o production.
 Seed orders bo sung **pickup details minh hoa** tu contact fixture va note
 seed; phone khach le demo, khong che dia chi giao that. Stock/debt la snapshot
@@ -121,7 +125,7 @@ cung request tra cung don, khac body/owner tra 409. Checkout/admin/account
 chung orders service. Website order chua ho tro sua o Sales editor (can requote
 policy). Sales form tao ho chua tinh shipping/coupon/thue.
 
-14 admin commands xem backend/src/admin/admin.dto.ts, rules xem shared/.
+14 admin commands xem src/admin/admin.dto.ts cua BE, rules xem shared/.
 Order commands can expectedRevision, stale tra 409. PostgreSQL advisory
 transaction lock serialize pilot commands (mot lock/DB); can row locks khi scale.
 Price/credit approval co snapshot, khong tu confirm/xuat kho. Receipt validate
@@ -130,7 +134,7 @@ Ngay admin va receipts lay server time Asia/Ho_Chi_Minh, khong previewDate.
 
 ## Media
 
-Anh goc da chuyen frontend/public/images -> backend/media/images, relative
+Anh goc da chuyen frontend/public/images -> media/images trong repo BE, relative
 URL /images/* duoc Next rewrite. Upload /media/uploads/UUID.webp, URL luu
 Product.image/gallery, binary luu disk backend, khong luu PostgreSQL.
 Max5MB JPEG/PNG/WebP, Sharp validate bytes max20MP, rotate, resize<=2000px,
@@ -151,13 +155,13 @@ sessions, khong tao/sua don hay du lieu kinh doanh. Sau QA van 63 products,
 Screenshots /tmp/bao-tin-ui-qa/supabase. Khong thay the full integration tests
 bang smoke-test nay.
 
-Trong repo BE, cd backend: `npm test` cho passwords/domain guards.
-`npm run test:api` trong backend: JWT/CSRF/branch/roles, ownership/pending, server quote,
+Tai goc repo BE: `npm test` cho passwords/domain guards.
+`npm run test:api` tai goc BE: JWT/CSRF/branch/roles, ownership/pending, server quote,
 idempotency/revision, checkout->Sales->warehouse->account, approval/receipt,
 publication/upload/logout. Chi local DB, cleanup ban ghi test.
 `npm run test:connected`: Playwright desktop/tablet/mobile, checkout/Sales/account
 reload, images, HTTPOnly cookie, accounting/upload control. Screenshots /tmp.
-Trong FE frontend/, set QA_BACKEND_DIR toi folder backend cua repo BE rieng;
+Trong FE frontend/, set QA_BACKEND_DIR toi GOC repo BE rieng;
 workspace cu co backend/ canh frontend/ van ho tro fallback.
 Hai bo test ghi/xoa du lieu va chi duoc chay voi API `dev:local` + database
 `.env.local`; dung API Supabase truoc khi chay. Frontend proxy phai tro den
