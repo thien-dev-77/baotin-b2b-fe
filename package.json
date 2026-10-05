@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:domain": "playwright test tests/domain.spec.ts --workers=1",
     "test:connected": "node scripts/connected-api-qa.mjs",
     "dev": "next dev",
     "build": "next build",

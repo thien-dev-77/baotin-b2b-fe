@@ -8,9 +8,9 @@ Xem [Backend Integration](docs/backend-integration.md) cho contract API.
 ```txt
 app/       Next.js App Router
 components/ UI storefront, account va dashboard
-lib/       Frontend adapters va mock hien co
+lib/       Types, frontend adapters, validation va mock hien co
 scripts/   Playwright QA
-shared/    Types va rules dung chung
+tests/     Unit tests cho rule frontend
 docs/      Nghiep vu, design system, quy tac UI, ban giao API
 design/    Anh thiet ke tham chieu
 package.json, package-lock.json va cau hinh Next.js/Tailwind/TypeScript o goc
@@ -33,8 +33,10 @@ Backend can chay cho API va anh: Next proxy /api/backend/* -> /api/*,
 /images/* -> /media/images/* va /media/* -> /media/*.
 DATABASE_URL, JWT_SECRET va SEED_PASSWORD chi o backend, khong o frontend env.
 
-`shared/` can cho frontend build, khong phai source NestJS. Types/rules duoc
-version trong ca hai repo; khi doi contract can cap nhat ca FE va BE.
+FE tu quan ly types trong lib/types.ts, API responses trong lib/api-types.ts
+va validation trong lib/admin-*.ts. BE co types/rules rieng trong src/;
+khong import code giua hai repo. Khi doi API can cap nhat DTO va FE adapter,
+kiem tra contract tuong thich. Xem [Code structure](docs/code-structure.md).
 Tu 05/10/2026, source Next.js nam ngay tai goc repo; khong con thu muc
 frontend/ hay npm wrapper. Backend clone rieng, khong commit vao repo FE.
 
@@ -44,6 +46,7 @@ frontend/ hay npm wrapper. Backend clone rieng, khong commit vao repo FE.
 npm run lint
 npm run build
 npm run typecheck
+npm run test:domain
 ```
 
 Connected browser QA can repo backend rieng. Chay tu goc repo FE:
@@ -79,6 +82,7 @@ Production can persistent media volume o BE va HTTPS cookies.
 ## Tai Lieu
 
 - [Project](docs/project.md)
+- [Cau truc code](docs/code-structure.md)
 - [Bat dau cong viec](docs/start-work.md)
 - [Design system](docs/design-system.md)
 - [Frontend platform](docs/frontend-platform.md)

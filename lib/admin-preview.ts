@@ -1,19 +1,15 @@
-import { catalog, type Product } from "@/lib/catalog";
+import { catalog } from "@/lib/catalog";
 import { readWarehouseRecord, type WarehouseRecord } from "@/lib/admin-warehouse";
-import { readSalesData, readSalesOrder, type SalesDetails, type SalesOrderData } from "@/lib/admin-sales";
-import { applyApprovedPrice, approvalMatchesOrder, latestOrderApprovals, readApprovalRequest, type ApprovalSnapshot, type ApprovalType } from "@/lib/admin-approval";
+import { readSalesData, readSalesOrder, type SalesOrderData } from "@/lib/admin-sales";
+import { applyApprovedPrice, readApprovalRequest } from "@/lib/admin-approval";
 import { collectible, readReceipts, validAccountingDate, type Receipt } from "@/lib/admin-accounting";
+import { branches, orderStages, type AdminApproval, type AdminCustomer, type AdminOrder, type AdminOrderStatus, type ApprovalStatus, type Branch, type CustomerStatus } from "./types";
+
+export { branches, orderStages } from "./types";
+export type { AdminApproval, AdminCustomer, AdminOrder, AdminOrderStatus, ApprovalStatus, Branch, CustomerStatus } from "./types";
+export { orderBlocker } from "./order-rules";
 
 export const previewDate = "2026-10-04";
-export const branches = ["Quy Nhơn", "Tuy Hòa", "Nha Trang"] as const;
-export type Branch = typeof branches[number];
-export const orderStages = ["Chờ xác nhận", "Chờ soạn hàng", "Đang soạn", "Sẵn sàng giao", "Đang giao", "Hoàn tất", "Đã hủy"] as const;
-export type AdminOrderStatus = typeof orderStages[number];
-export type CustomerStatus = "Chờ duyệt" | "Đang hoạt động" | "Tạm ngưng";
-export type ApprovalStatus = "Chờ duyệt" | "Đã duyệt" | "Từ chối";
-export type AdminCustomer = { id: string; name: string; contact: string; phone: string; group: string; branch: Branch; status: CustomerStatus; limit: number; debt: number; overdue: number };
-export type AdminOrder = { id: string; customerId: string | null; customerName: string; branch: Branch; date: string; channel: "B2B" | "B2C"; source: string; status: AdminOrderStatus; items: { productId: string; quantity: number; unitPrice: number }[]; total: number; credit: boolean; approvalId?: string; cancelReason?: string; details?: SalesDetails };
-export type AdminApproval = { id: string; orderId: string; customerId: string; branch: Branch; type: ApprovalType; requestedBy: string; reason: string; status: ApprovalStatus; decisionReason?: string; createdAt?: string; snapshot?: ApprovalSnapshot };
 
 export const adminCustomers: AdminCustomer[] = [
   { id: "KH001", name: "Xưởng nội thất Minh An", contact: "Nguyễn Minh An", phone: "0901 000 101", group: "Xưởng nội thất", branch: "Quy Nhơn", status: "Đang hoạt động", limit: 50000000, debt: 12400000, overdue: 0 },
@@ -116,20 +112,6 @@ export function readAdminOverrides(raw: string): AdminPreviewOverrides {
     if (order.credit && collectible(order) && typeof date === "string" && validAccountingDate(date) && date >= order.date) result.paymentDueDates[order.id] = date;
   }
   return result;
-}
-
-export function orderBlocker(order: AdminOrder, customers: AdminCustomer[], approvals: AdminApproval[], products: Product[]) {
-  const customer = customers.find((item) => item.id === order.customerId);
-  if (customer && customer.status !== "Đang hoạt động") return "Tài khoản B2B chưa được kích hoạt hoặc đang tạm ngưng.";
-  if (order.items.some((item) => item.quantity > (products.find((product) => product.id === item.productId)?.stock || 0))) return "Tồn kho không đủ cho số lượng đặt hàng.";
-  const linked = latestOrderApprovals(order, approvals);
-  if (linked.some((item) => !approvalMatchesOrder(item, order))) return "Nội dung đơn không khớp yêu cầu, cần gửi lại đề nghị.";
-  if (linked.some((item) => item.status === "Từ chối")) return "Yêu cầu ngoại lệ đã bị từ chối.";
-  if (linked.some((item) => item.status === "Chờ duyệt")) return "Cần duyệt ngoại lệ trước khi xác nhận đơn.";
-  const creditApproval = linked.find((item) => item.type === "Công nợ" && item.status === "Đã duyệt");
-  const creditAllowed = creditApproval && (creditApproval.snapshot?.kind !== "credit" || order.total <= creditApproval.snapshot.amount);
-  if (order.credit && customer && (customer.overdue > 0 || customer.debt + order.total > customer.limit) && !creditAllowed) return "Công nợ vượt hạn mức hoặc quá hạn, cần duyệt ngoại lệ.";
-  return "";
 }
 
 export function downloadAdminCsv(name: string, rows: (string | number)[][]) {

@@ -4,7 +4,7 @@ Cap nhat 04/10/2026. Stack theo yeu cau: NestJS, TypeScript, TypeORM
 synchronize, Supabase PostgreSQL, JWT; seed mock cu va luu anh tren backend.
 Giu giao dien frontend. Tai lieu nay thay hien trang preview trong api-handoff.md.
 Tu 05/10/2026, source backend nam trong repo baotin-b2b-be; repo baotin-b2b-fe
-chua app/, components/, lib/, scripts/, shared/ va docs/design ngay tai goc;
+chua app/, components/, lib/, scripts/, tests/ va docs/design ngay tai goc;
 khong con thu muc frontend/ hay npm wrapper. Trong repo BE, src/, media/,
 scripts/, seed/, certs/, test/ va package.json nam tai GOC repo, khong con
 backend/ trung gian. Workspace local cu van co backend/ ignored; duong dan
@@ -39,7 +39,10 @@ mock khi API loi; doi NEXT_PUBLIC_* can restart/rebuild frontend.
 
 - BE src/database: DataSource, entities va SeedService.
 - BE src/auth/catalog/orders/admin/account/media: modules nghiep vu.
-- shared/: types, pricing va rules Sales/approval/warehouse/accounting.
+- FE lib/types.ts va lib/api-types.ts: types va API response contract.
+- FE lib/admin-*.ts, lib/order-rules.ts, lib/pricing.ts: UI/preview validation.
+- BE src/types/: types cua backend; src/admin/rules/: business rules.
+- BE src/catalog/pricing.ts: seed pricing tren server; hai repo khong import nhau.
 - FE lib/api-client.ts: fetch same-origin, cookie, errors.
 - FE lib/server-api.ts: product SSR, hidden SKU 404.
 - FE components/admin/api-admin-provider.tsx: state va commands API.
@@ -126,7 +129,7 @@ cung request tra cung don, khac body/owner tra 409. Checkout/admin/account
 chung orders service. Website order chua ho tro sua o Sales editor (can requote
 policy). Sales form tao ho chua tinh shipping/coupon/thue.
 
-14 admin commands xem src/admin/admin.dto.ts cua BE, rules xem shared/.
+14 admin commands xem src/admin/admin.dto.ts cua BE, rules xem src/admin/rules/.
 Order commands can expectedRevision, stale tra 409. PostgreSQL advisory
 transaction lock serialize pilot commands (mot lock/DB); can row locks khi scale.
 Price/credit approval co snapshot, khong tu confirm/xuat kho. Receipt validate

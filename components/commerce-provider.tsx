@@ -1,8 +1,8 @@
 "use client";
 
 import { CartLine, Customer, Order, Product, catalog, categoryCatalog, findProduct } from "@/lib/catalog";
-import type { Category, SessionUser } from "../shared/types";
-import type { ApiSession, CatalogResponse, CheckoutDraft, Quote } from "../shared/api";
+import type { Category, SessionUser } from "@/lib/types";
+import type { ApiSession, CatalogResponse, CheckoutDraft, Quote } from "@/lib/api-types";
 import { api, apiMode } from "@/lib/api-client";
 import { CheckCircle2, X } from "lucide-react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";

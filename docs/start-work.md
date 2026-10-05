@@ -63,10 +63,10 @@ Kien truc hai repo hien tai (lenh npm chay tai goc tung repo):
 
 ```txt
 baotin-b2b-fe/
-  app/, components/, lib/, scripts/, shared/
+  app/, components/, lib/, scripts/, tests/
   docs/, design/, package.json
 baotin-b2b-be/
-  src/, media/, seed/, scripts/, shared/, test/
+  src/, media/, seed/, scripts/, test/
   docs/, certs/, package.json
 ```
 
