@@ -1,7 +1,7 @@
 # Quy tac UX/UI cho website B2B/B2C
 
-Code/components/assets nam trong `frontend/`; tai lieu va anh tham chieu
-giu tai `docs/` va `design/` o root.
+Code/components nam ngay tai goc repo FE; tai lieu va anh tham chieu
+giu tai `docs/` va `design/`. Anh website luu tai BE va phuc vu qua rewrite.
 
 Tai lieu nay quy dinh cach thiet ke giao dien cho he thong B2B/B2C. Muc tieu la giu san pham de dung tren dien thoai, thao tac nhanh cho khach B2B, va ro rang voi khach B2C khong biet ma hang ky thuat.
 

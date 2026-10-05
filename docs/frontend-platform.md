@@ -3,9 +3,11 @@
 ## Pham vi
 
 Ban Next.js + TypeScript + Tailwind de duyet giao dien va thao tac truoc khi lam backend.
-App Router va toan bo Next.js nam trong `frontend/` theo yeu cau tach thu muc.
-`backend/` chi la khung tai lieu; chua tao API. Lenh npm tai root chuyen tiep
-den frontend. Cac duong dan code trong tai lieu nay tuong doi voi `frontend/`.
+Tu 05/10/2026, App Router va toan bo Next.js nam ngay tai goc repo FE;
+khong con frontend/ hay npm wrapper. Backend da noi API va quan ly rieng
+trong repo baotin-b2b-be; doc [backend-integration.md](backend-integration.md).
+Phan duoi la ban giao preview truoc tich hop. Cac duong dan code tuong doi
+voi goc repo FE, lenh npm chay tai goc.
 Visual reference: `design/839a8103-bf56-4a25-8271-87e3a8a6a0a8.png` va `design/trangchitiet.png`.
 
 **Day la frontend preview, khong phai he thong da san sang nhan don hang that.**
@@ -246,7 +248,9 @@ doi chieu/chenh lech, huy co ly do va han thanh toan. Debt snapshot khong doi.
 Doc `docs/accounting-preview.md` (root). QA accounting 5 viewport + guard,
 admin 8 route x 5 viewport, Sales/approvals/kho va storefront/account
 `accounting-folder-split` pass, `issues: []`; build/lint/typecheck pass.
-Next.js va QA scripts nam trong frontend/, backend/ chua co API.
+Ghi chu lich su truoc tich hop: Next.js va QA tung nam trong frontend/ va
+backend/ chua co API. Hien tai FE ngay tai goc, BE quan ly rieng va da noi API;
+doc backend-integration.md cho hien trang.
 
 ## TODO Truoc Production
 

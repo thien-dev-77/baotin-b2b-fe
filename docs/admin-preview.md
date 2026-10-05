@@ -63,9 +63,9 @@ ngoai ky bao cao. Khong hien don cho Inside Sales xac nhan, don da huy/hoan tat.
 
 ## Component Va Style
 
-Cac duong dan code ben duoi tuong doi voi `frontend/` sau khi tach thu muc.
+Cac duong dan code ben duoi tuong doi voi goc repo FE tu 05/10/2026.
 Thu tien: [accounting-preview.md](accounting-preview.md); debt goc khong doi
-theo receipts. Root `npm run ...` chuyen tiep vao frontend.
+theo receipts. `npm run ...` chay truc tiep tai goc, khong con npm wrapper.
 
 - `components/site-frame.tsx`: chon storefront hoac khung admin theo pathname.
 - `app/admin/layout.tsx`: provider + shell, metadata noindex.
@@ -150,4 +150,6 @@ amount/date sai, thanh toan du, parser branch/audit/duplicate. `test:admin`
 8 route x 5 viewport pass. Sales, approvals, warehouse va storefront/account
 `accounting-folder-split` pass, `issues: []`. Build/lint/typecheck pass.
 Report accounting: `/tmp/bao-tin-ui-qa/admin-accounting/report.json`.
-Source da chuyen vao frontend/, backend/ chi co README, npm root chuyen tiep.
+Ghi chu lich su truoc tich hop: source tung nam trong frontend/, backend/
+chi co README, npm root chuyen tiep. Hien tai source FE ngay tai goc repo;
+API BE quan ly rieng, xem backend-integration.md.

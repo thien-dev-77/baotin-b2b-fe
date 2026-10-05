@@ -11,7 +11,7 @@ import { collectible, reconciliationBlocker, validateReceipt, validAccountingDat
 import { apiMode } from "@/lib/api-client";
 import { ApiAdminProvider } from "./api-admin-provider";
 import { branches } from "@/lib/admin-preview";
-import type { ApiAdminState } from "../../../shared/api";
+import type { ApiAdminState } from "../../shared/api";
 
 function useAdminState() {
   const [overrides, setOverrides] = useState<AdminPreviewOverrides>(emptyAdminOverrides);

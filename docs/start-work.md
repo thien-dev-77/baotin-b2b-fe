@@ -5,8 +5,11 @@ Muc tieu la tao MVP co the van hanh thu tai chi nhanh Quy Nhon trong 90 ngay.
 
 ## Cap nhat thu tu trien khai
 
-Theo yeu cau moi, Next.js da chuyen vao `frontend/`; `backend/` chi co tai lieu,
-chua khoi tao NestJS/Supabase/TypeORM. `docs/` va `design/` dung chung o root.
+Cap nhat 05/10/2026: Next.js nam ngay tai goc repo baotin-b2b-fe, khong con
+frontend/ hay npm wrapper. Backend NestJS/TypeORM/JWT da ket noi Supabase va
+seed mock, quan ly rieng trong repo baotin-b2b-be. Doc
+[backend-integration.md](backend-integration.md) cho hien trang API va cach chay.
+Roadmap ben duoi giu lich su giai doan frontend-first, khong phai hien trang API.
 
 - Duyet frontend tuong tac voi du lieu mau truoc khi ket noi backend.
 - Chuan component, danh sach route, gioi han mock va checklist backend: `docs/frontend-platform.md`.
@@ -56,18 +59,15 @@ Database va ha tang:
 - Supabase Storage cho hinh anh san pham neu can
 - Supabase Auth hoac auth rieng trong NestJS
 
-Kien truc repo de xuat:
+Kien truc hai repo hien tai (lenh npm chay tai goc tung repo):
 
 ```txt
-frontend/  # Next.js va du lieu mock hien co
-backend/   # Tai lieu, chua khoi tao NestJS
-design/    # Anh tham chieu
-
-docs/
-  design-system.md
-  project.md
-  start-work.md
-  ui-ux-rules.md
+baotin-b2b-fe/
+  app/, components/, lib/, scripts/, shared/
+  docs/, design/, package.json
+baotin-b2b-be/
+  src/, media/, seed/, scripts/, shared/, test/
+  docs/, certs/, package.json
 ```
 
 ## 3. MVP can lam truoc
@@ -312,9 +312,9 @@ B2C:
 
 ### Tuan 1: Khoi tao nen tang
 
-- Dung cau truc `frontend/` va `backend/` da tach.
+- Dung hai repo FE/BE rieng, source va package.json ngay tai goc tung repo.
 - Khoi tao `backend/` voi NestJS sau khi duyet UI va hop dong du lieu.
-- Giu Next.js hien co trong `frontend/`, khong tao web app thu hai.
+- Giu Next.js hien co tai goc repo FE, khong tao web app thu hai.
 - Cai Tailwind CSS.
 - Ket noi Supabase PostgreSQL.
 - Cau hinh TypeORM.

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { apiMode } from "@/lib/api-client";
-import type { Quote } from "../../shared/api";
+import type { Quote } from "../shared/api";
 
 export function OrderTotals({ subtotal, shipping, discount, total }: { subtotal: number; shipping?: number; discount: number; total: number }) {
   return <dl className="space-y-3 text-sm"><div className="flex justify-between gap-3"><dt className="text-text-secondary">Tạm tính</dt><dd className="font-medium">{money(subtotal)}</dd></div><div className="flex justify-between gap-3"><dt className="text-text-secondary">Phí giao hàng</dt><dd>{shipping === undefined ? "Chưa tính" : shipping ? money(shipping) : "Miễn phí"}</dd></div><div className="flex justify-between gap-3"><dt className="text-text-secondary">Giảm giá</dt><dd className="text-success">{discount ? `−${money(discount)}` : money(0)}</dd></div><div className="flex justify-between gap-3 border-t border-border pt-4"><dt className="font-semibold">Tổng cộng</dt><dd className="text-xl font-bold text-danger">{money(total)}</dd></div></dl>;

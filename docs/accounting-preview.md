@@ -1,6 +1,6 @@
 # Thu Tien Va Doi Chieu (UI Mock)
 
-Route: `/admin/accounting`. Ma nguon trong `frontend/`.
+Route: `/admin/accounting`. Ma nguon ngay tai goc repo FE.
 Ngay moc 04/10/2026; receipts bat dau rong, dung cac don/khach mock hien co.
 Khong tu tao phieu thu lich su tu total don hay snapshot debt cua khach.
 
@@ -49,11 +49,11 @@ Han thanh toan co state, chua co audit rieng/reason cho thay doi han.
 
 ## Code Va API Handoff
 
-- `frontend/lib/admin-accounting.ts`: types, validation, payment projection, parser.
-- `frontend/components/admin/admin-provider.tsx`: create/reconcile/void/due actions.
+- `lib/admin-accounting.ts`: types, validation, payment projection, parser.
+- `components/admin/admin-provider.tsx`: create/reconcile/void/due actions.
 - `admin-accounting.tsx`, `admin-receipt-form.tsx`, `admin-receipt-detail.tsx`:
-  queue, form va review trong `frontend/components/admin/`.
-- `frontend/scripts/admin-accounting-qa.mjs`: 5 viewport, partial/mismatch/duplicate,
+  queue, form va review trong `components/admin/`.
+- `scripts/admin-accounting-qa.mjs`: 5 viewport, partial/mismatch/duplicate,
   reload, cancel, due, branch, CSV, legacy/corrupt storage/reset isolation.
 
 De xuat API sau duyet: GET receipts/outstanding, POST receipts,

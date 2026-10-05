@@ -2,8 +2,10 @@
 
 Trang chu tinh da duoc dung bang Next.js + Tailwind de duyet UX/UI truoc khi lam backend.
 
-Code va assets da chuyen vao `frontend/`; `design/` giu nguyen o root.
-Cac duong dan code ben duoi tuong doi voi `frontend/`.
+Code Next.js nam ngay tai goc repo FE; `design/` giu nguyen o root.
+Cac duong dan code ben duoi tuong doi voi goc repo. Anh da chuyen sang BE;
+API mode hien tai xem [backend-integration.md](backend-integration.md).
+Phan duoi ghi lai ban giao homepage tinh truoc tich hop API.
 
 ## Muc tieu
 

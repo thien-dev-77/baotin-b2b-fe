@@ -1,6 +1,9 @@
 # Image assets
 
-After the folder split, local files live under `frontend/public/images/`.
+Images now live in `media/images/` in the separate backend repository.
+Next.js rewrites `/images/*` to the backend; the table below uses paths
+relative to that image directory. The former `frontend/public/images/` paths
+describe the static-preview layout, not the current frontend repository.
 Sources, dimensions and production-verification caveats below are unchanged.
 
 ## Current preview
@@ -11,7 +14,7 @@ enlarged in the UI. The following original photos replace those crops without
 upscaling or artificial sharpening. Files are local so rendering does not depend
 on external image hosts.
 
-| Local file under `public/images/` | Original dimensions | Source |
+| File under backend `media/images/` | Original dimensions | Source |
 | --- | --- | --- |
 | `hero/kitchen-lighting-hd.jpg` | 3750 x 888 | [Armacost: under-cabinet installation](https://www.armacostlighting.com/blogs/news/how-to-under-cabinet-led), lifestyle kitchen photo |
 | `hero/cabinet-lighting-hd.jpg` | 3750 x 1250 | [Armacost: strip light applications](https://www.armacostlighting.com/blogs/news/led-strip-light-applications), toe-kick photo |

@@ -17,9 +17,10 @@ NestJS + TypeScript + TypeORM + Supabase PostgreSQL **sau khi UI duoc duyet**.
 Day khong phai hop dong API da chot, schema production hay lenh khoi tao backend.
 Nguoi dung uu tien hoan thien giao dien truoc; khong tu chuyen giai doan.
 
-Cau truc repo FE: Next.js trong `frontend/`, types/rules trong `shared/`.
+Cau truc repo FE tu 05/10/2026: Next.js ngay tai goc repo (app/, components/,
+lib/, scripts/, package.json), types/rules trong `shared/`; khong con frontend/.
 Backend nam rieng tai https://github.com/thien-dev-77/baotin-b2b-be.
-Cac duong dan code trong tai lieu nay tuong doi voi `frontend/`; tai lieu va
+Cac duong dan code trong tai lieu nay tuong doi voi goc repo FE; tai lieu va
 design van o root. Doc them `docs/accounting-preview.md` cho luong thu tien.
 
 **UI chua day du theo project.md.** Muc 3 ghi ro backlog. Mock trong trinh duyet

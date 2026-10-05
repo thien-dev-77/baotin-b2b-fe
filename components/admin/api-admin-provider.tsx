@@ -7,8 +7,8 @@ import { api } from "@/lib/api-client";
 import { useCommerce } from "@/components/commerce-provider";
 import { Button, Field } from "@/components/ui";
 import { isWarehouseOrder } from "@/lib/admin-warehouse";
-import type { ApiAdminState } from "../../../shared/api";
-import type { Branch } from "../../../shared/types";
+import type { ApiAdminState } from "../../shared/api";
+import type { Branch } from "../../shared/types";
 import { AdminContext, type AdminValue } from "./admin-provider";
 
 const empty: ApiAdminState = { products: [], customers: [], orders: [], approvals: [], warehouse: {}, receipts: [], paymentDueDates: {}, today: "" };

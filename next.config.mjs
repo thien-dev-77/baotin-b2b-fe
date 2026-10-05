@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   distDir: process.env.NEXT_DIST_DIR || ".next",
-  experimental: { externalDir: true },
   async rewrites() {
     const backend = process.env.BACKEND_URL || "http://127.0.0.1:4000";
     return [

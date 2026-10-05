@@ -6,17 +6,21 @@ Backend NestJS/TypeORM/JWT va media duoc quan ly rieng tai
 Xem [Backend Integration](docs/backend-integration.md) cho contract API.
 
 ```txt
-frontend/  Next.js, components, frontend adapters va Playwright
+app/       Next.js App Router
+components/ UI storefront, account va dashboard
+lib/       Frontend adapters va mock hien co
+scripts/   Playwright QA
 shared/    Types va rules dung chung
 docs/      Nghiep vu, design system, quy tac UI, ban giao API
 design/    Anh thiet ke tham chieu
+package.json, package-lock.json va cau hinh Next.js/Tailwind/TypeScript o goc
 ```
 
 ## Chay Frontend
 
 ```sh
-npm --prefix frontend ci
-# frontend/.env.local theo frontend/.env.example
+npm ci
+# Tao .env.local tai goc theo .env.example
 npm run dev -- --port 3010
 ```
 
@@ -31,8 +35,8 @@ DATABASE_URL, JWT_SECRET va SEED_PASSWORD chi o backend, khong o frontend env.
 
 `shared/` can cho frontend build, khong phai source NestJS. Types/rules duoc
 version trong ca hai repo; khi doi contract can cap nhat ca FE va BE.
-Thu muc backend/ local trong workspace hien tai duoc giu nguyen nhung ignored,
-khong duoc commit/push vao repo nay.
+Tu 05/10/2026, source Next.js nam ngay tai goc repo; khong con thu muc
+frontend/ hay npm wrapper. Backend clone rieng, khong commit vao repo FE.
 
 ## Kiem Thu
 
@@ -42,21 +46,35 @@ npm run build
 npm run typecheck
 ```
 
-Connected browser QA can repo backend rieng. Chay tu frontend/:
+Connected browser QA can repo backend rieng. Chay tu goc repo FE:
 
 ```sh
 # Chi local DB + dev:local API; KHONG chay voi API Supabase
-QA_BACKEND_DIR=../../baotin-b2b-be npm run test:connected
+QA_BACKEND_DIR=../baotin-b2b-be npm run test:connected
+# Cac QA ben duoi chi cho NEXT_PUBLIC_API_MODE=false
+QA_BASE_URL=http://localhost:3010 npm run test:accounting
+QA_BASE_URL=http://localhost:3010 npm run test:admin
+QA_BASE_URL=http://localhost:3010 npm run test:sales
+QA_BASE_URL=http://localhost:3010 npm run test:approvals
+QA_BASE_URL=http://localhost:3010 npm run test:warehouse
+QA_BASE_URL=http://localhost:3010 npm run test:ui
 ```
 
 QA_BACKEND_DIR tro toi goc repo BE co package.json, dependencies va
-.env.local cua DB test. Script van ho tro workspace cu co backend/ canh
-frontend/, nhung backend khong la mot phan cua repo FE.
+.env.local cua DB test. Mac dinh tim repo baotin-b2b-be ben canh repo FE;
+workspace cu can truyen QA_BACKEND_DIR toi thu muc backend thuc te.
 API/unit tests backend chay trong repo BE, khong co script backend o root FE.
-QA preview cu chi dung API_MODE=false. Anh van can media server cua BE.
-Build voi NEXT_DIST_DIR=.next-build neu dev server dang chay.
-QA browser can server dang chay va Chromium Playwright.
-Doc [frontend/README.md](frontend/README.md) de xem cac test nghiep vu.
+Anh van can media server cua BE. QA browser can server dang chay va Chromium
+Playwright; lan dau chay `npx playwright install chromium`.
+Khong build/dev tren cung distDir: build voi NEXT_DIST_DIR=.next-build neu
+dev server dang chay. Chay typecheck sau build khi Next da sinh xong types.
+
+## Deploy
+
+Chon **Root Directory = .** (hoac de trong), khong chon frontend/.
+Install `npm ci`, build `npm run build`, start `npm run start` khi tu host Node.
+Frontend env tai goc theo .env.example; BACKEND_URL tro toi backend host.
+Production can persistent media volume o BE va HTTPS cookies.
 
 ## Tai Lieu
 

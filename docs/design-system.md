@@ -1,7 +1,8 @@
 # Bao Tin design system
 
-Code Next.js nam trong `frontend/`; cac duong dan code/assets trong tai lieu
-tuong doi voi thu muc nay. `docs/` va `design/` van nam o root.
+Code Next.js nam ngay tai goc repo FE; cac duong dan code trong tai lieu
+tuong doi voi goc. `docs/` va `design/` giu nguyen; anh duoc phuc vu tu BE
+qua Next.js rewrite, xem [backend-integration.md](backend-integration.md).
 
 Tai lieu nay la chuan giao dien dung chung cho website B2B/B2C. Khi lam trang moi, uu tien dung cac token va component style trong file nay truoc khi tao style rieng.
 
