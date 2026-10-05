@@ -15,3 +15,5 @@ test-results/
 !.env.example
 *.pem
 *.key
+# Backend is maintained in thien-dev-77/baotin-b2b-be, not this FE repository.
+/backend/

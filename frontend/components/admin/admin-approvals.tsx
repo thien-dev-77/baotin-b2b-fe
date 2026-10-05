@@ -23,9 +23,10 @@ export function AdminApprovals({ initialRequest = "" }: { initialRequest?: strin
   const rows = scopedApprovals.filter((item) => (filters.filter === "all" || item.status === filters.filter) && normalize(`${item.id} ${item.orderId} ${customers.find((customer) => customer.id === item.customerId)?.name} ${item.type}`).includes(normalize(filters.query)));
   const page = Math.min(filters.page, Math.max(1, Math.ceil(rows.length / 10)));
   function openRequest(id: string) { setReason(""); setSelected(id); }
-  function decide(approved: boolean) {
+  async function decide(approved: boolean) {
     if (!approval || !reason.trim() || (approved ? blocker : rejectionBlocker)) return;
-    decideApproval(approval.id, approved, reason);
+    const error = await decideApproval(approval.id, approved, reason);
+    if (error) return;
     setSelected(null);
     setReason("");
   }

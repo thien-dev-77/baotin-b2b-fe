@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:connected": "npm --prefix frontend run test:connected",
     "dev": "npm --prefix frontend run dev --",
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix frontend run start --",

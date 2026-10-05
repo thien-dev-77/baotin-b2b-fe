@@ -1,23 +1,10 @@
 import { products as homeProducts } from "@/lib/home-data";
 import { lockGroups, lockProducts } from "@/lib/lock-catalog";
+import type { Category, Product, Customer, Order, OrderStatus } from "../../shared/types";
+export type { Category, Product, Customer, CartLine, OrderStatus, Order } from "../../shared/types";
+import { priceFor as previewPrice } from "../../shared/pricing";
+export const priceFor = (product: Product, customer: Customer | null) => process.env.NEXT_PUBLIC_API_MODE === "true" ? (customer?.status === "active" ? product.customerPrice ?? product.price : product.price) : previewPrice(product, customer);
 
-export type Category = { slug: string; name: string; image: string; description: string; subcategories: string[] };
-export type Product = {
-  id: string; slug: string; name: string; code: string; category: string; subcategory: string;
-  image: string; gallery: string[]; brand: string; specification: string; material: string;
-  color: string; size: string; origin: string; price: number; oldPrice?: number;
-  unit: string; stock: number; featured: boolean;
-};
-export type Customer = { id: string; name: string; email: string; phone: string; company: string; tax?: string; address?: string; status?: "pending" | "active"; creditLimit?: number; debt?: number; role: "b2b" };
-export type CartLine = { productId: string; quantity: number };
-export type OrderStatus = "Chờ xác nhận" | "Đang xử lý" | "Đang giao" | "Đã giao" | "Đã hủy";
-export type Order = {
-  id: string; customerId: string | null; date: string; status: OrderStatus; b2b: boolean;
-  items: { productId: string; quantity: number; unitPrice: number }[];
-  subtotal: number; shipping: number; discount: number; total: number;
-  customer: { name: string; phone: string; email: string; address: string; city: string; district: string; ward: string };
-  delivery: string; payment: string; note: string;
-};
 
 export const categoryCatalog: Category[] = [
   { slug: "phu-kien-bep", name: "Phụ kiện bếp", image: "/images/catalog/kitchen-storage-hd.jpg", description: "Phụ kiện tủ bếp chính hãng, tối ưu lưu trữ và thuận tiện trong từng thao tác.", subcategories: ["Giá bát nâng hạ", "Giá xoong nồi", "Thùng rác âm tủ", "Kệ gia vị", "Kệ góc", "Phụ kiện tủ bếp"] },
@@ -99,11 +86,6 @@ export const catalog: Product[] = [...originals, ...extras.map(([name, categoryI
 export const findProduct = (id: string) => catalog.find((p) => p.id === id || p.slug === id);
 export const findCategory = (slug: string) => categoryCatalog.find((c) => c.slug === slug);
 export const brands = ["Hafele", "Hettich", "Bảo Tín"];
-
-// Preview pricing only; replace this adapter with authenticated server pricing when connecting the backend.
-export function priceFor(product: Product, customer: Customer | null) {
-  return customer ? Math.max(1000, Math.round(product.price * 0.9 / 500) * 500) : product.price;
-}
 
 export const guideCatalog = [
   { slug: "chon-ban-le-theo-loai-canh", title: "Chọn bản lề theo loại cánh", description: "Phân biệt cánh phủ bì, nửa phủ và lọt lòng để chọn đúng bản lề.", image: "/images/catalog/hinge.png", category: "ban-le", minutes: 5 },

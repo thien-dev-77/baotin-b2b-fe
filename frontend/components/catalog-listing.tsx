@@ -1,5 +1,5 @@
 "use client";
-import { Category, Product, brands, catalog, categoryCatalog, money, normalize, priceFor } from "@/lib/catalog";
+import { Category, Product, brands, money, normalize, priceFor } from "@/lib/catalog";
 import { ProductGrid } from "@/components/product-card";
 import { PromotionCard } from "@/components/promotion-card";
 import { Breadcrumb, Button, EmptyState, Modal, PageHeading, Pagination, Tabs } from "@/components/ui";
@@ -13,7 +13,7 @@ type Filters = { category: string[]; brand: string[]; material: string[]; color:
 const emptyFilters: Filters = { category: [], brand: [], material: [], color: [], size: [], origin: [], stock: [], min: "", max: "", subcategory: "" };
 
 export function CatalogListing({ category, query, brand, promotion = false, initialSubcategory = "" }: { category?: Category; query?: string; brand?: string; promotion?: boolean; initialSubcategory?: string }) {
-  const { customer } = useCommerce();
+  const { customer, products: catalog, categories: categoryCatalog } = useCommerce();
   const [filters, setFilters] = useState<Filters>(() => ({ ...emptyFilters, subcategory: initialSubcategory }));
   const [drawer, setDrawer] = useState(false);
   const [sort, setSort] = useState("popular");

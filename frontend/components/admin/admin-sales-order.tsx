@@ -50,10 +50,10 @@ function SalesOrderForm({ order }: { order?: AdminOrder }) {
     setDraft((state) => ({ ...state, customerId: id, details: { ...state.details, recipient: selected?.contact || "", phone: selected?.phone || "", payment: "Chuyển khoản", delivery: !selected && !["Giao nội thành", "Nhận tại cửa hàng"].includes(state.details.delivery) ? "Nhận tại cửa hàng" : state.details.delivery } }));
     setError("");
   }
-  function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (saving) return;
-    const result = saveSalesOrder(draft, order?.id, reason);
+    const result = await saveSalesOrder(draft, order?.id, reason);
     if (result.error) { setError(result.error); return; }
     setSaving(true);
     router.push(`/admin/orders?order=${result.id}`);

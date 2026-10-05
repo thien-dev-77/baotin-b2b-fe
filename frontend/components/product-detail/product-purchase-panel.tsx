@@ -7,19 +7,21 @@ import { money, priceFor, type Product } from "@/lib/catalog";
 import { CheckCircle2, Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { apiMode } from "@/lib/api-client";
 
 export function ProductPurchasePanel({ product }: { product: Product }) {
   const { customer, add, toggleFavorite, favorites } = useCommerce();
   const [quantity, setQuantity] = useState(1);
   const price = priceFor(product, customer);
+  const isB2b = apiMode ? customer?.status === "active" && product.customerPrice !== undefined : Boolean(customer);
   const liked = favorites.includes(product.id);
   const loginHref = `/login?next=/products/${product.slug}`;
 
   return (
     <aside aria-label="Mua sản phẩm" tabIndex={0} className="bt-product-detail-purchase overflow-hidden rounded-lg border border-border bg-white">
       <div className="grid grid-cols-2 border-b border-border text-xs">
-        <span className={`py-3 text-center font-semibold ${customer ? "text-text-secondary" : "bg-section-blue text-primary"}`}>Giá bán lẻ</span>
-        {customer ? (
+        <span className={`py-3 text-center font-semibold ${isB2b ? "text-text-secondary" : "bg-section-blue text-primary"}`}>Giá bán lẻ</span>
+        {isB2b ? (
           <span className="bg-section-blue py-3 text-center font-semibold text-blue-brand">Giá B2B</span>
         ) : (
           <Link href={loginHref} className="py-3 text-center text-text-secondary">Giá B2B (Đăng nhập)</Link>

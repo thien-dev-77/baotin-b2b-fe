@@ -1,5 +1,5 @@
 "use client";
-import { catalog, categoryCatalog, brands, money, normalize, priceFor } from "@/lib/catalog";
+import { brands, money, normalize, priceFor } from "@/lib/catalog";
 import { useCommerce } from "@/components/commerce-provider";
 import { Modal } from "@/components/ui";
 import { Search } from "lucide-react";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
 export function SearchBox({ large = false, compactButton = false, initialValue = "" }: { large?: boolean; compactButton?: boolean; initialValue?: string }) {
-  const { customer } = useCommerce();
+  const { customer, products: catalog, categories: categoryCatalog } = useCommerce();
   const router = useRouter();
   const [query, setQuery] = useState(initialValue);
   const [open, setOpen] = useState(false);

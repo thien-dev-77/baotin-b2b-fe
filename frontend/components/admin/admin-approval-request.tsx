@@ -31,10 +31,10 @@ function ApprovalRequestForm({ initialOrder, initialType }: { initialOrder: stri
   const blocker = approvalRequestBlocker(order, customer, type, approvals);
   const existing = order ? latestOrderApprovals(order, approvals).find((item) => item.type === type) : undefined;
 
-  function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!order || saving) return;
-    const result = createApproval(order.id, { type, reason, prices: Object.fromEntries(order.items.map((item) => [item.productId, prices[item.productId] ?? item.unitPrice])) });
+    const result = await createApproval(order.id, { type, reason, prices: Object.fromEntries(order.items.map((item) => [item.productId, prices[item.productId] ?? item.unitPrice])) });
     if (result.error) { setError(result.error); return; }
     setSaving(true);
     router.push(`/admin/approvals?request=${result.id}`);

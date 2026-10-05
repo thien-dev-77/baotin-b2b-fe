@@ -25,8 +25,8 @@ export const adminCustomers: AdminCustomer[] = [
   { id: "KH007", name: "Xưởng nội thất Đại Lộc", contact: "Nguyễn Đại Lộc", phone: "0901 000 107", group: "Xưởng nội thất", branch: "Tuy Hòa", status: "Chờ duyệt", limit: 0, debt: 0, overdue: 0 }
 ];
 
-export function dateBefore(days: number) {
-  const date = new Date(`${previewDate}T12:00:00Z`);
+export function dateBefore(days: number, reference = previewDate) {
+  const date = new Date(`${reference}T12:00:00Z`);
   date.setUTCDate(date.getUTCDate() - days);
   return date.toISOString().slice(0, 10);
 }

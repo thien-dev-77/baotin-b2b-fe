@@ -2,6 +2,14 @@
 
 Cap nhat: 04/10/2026. Tai lieu song, can cap nhat sau moi luong UI duoc duyet.
 
+**Cap nhat giai doan:** nguoi dung da yeu cau backend. NestJS/TypeORM/JWT,
+seed mock va media backend da them. Doc `docs/backend-integration.md` cho
+hien trang API/env/tests/backlog. Phan duoi giu nhu ban giao UI preview
+truoc tich hop, khong xem "chua co API/localStorage-only" la API mode hien tai.
+Supabase da ket noi qua Session pooler, TLS verify, schema baotin_app da
+synchronize va seed mock. Integration tests van dung PostgreSQL local;
+khong chay cac test ghi du lieu voi API Supabase. Chua co KiotViet.
+
 ## 1. Muc dich va dieu kien bat dau
 
 Huong dan agent tiep theo doc UI, tai su dung mock hien co va lap ke hoach
@@ -9,7 +17,8 @@ NestJS + TypeScript + TypeORM + Supabase PostgreSQL **sau khi UI duoc duyet**.
 Day khong phai hop dong API da chot, schema production hay lenh khoi tao backend.
 Nguoi dung uu tien hoan thien giao dien truoc; khong tu chuyen giai doan.
 
-Cau truc moi: Next.js trong `frontend/`, backend chi co `backend/README.md`.
+Cau truc repo FE: Next.js trong `frontend/`, types/rules trong `shared/`.
+Backend nam rieng tai https://github.com/thien-dev-77/baotin-b2b-be.
 Cac duong dan code trong tai lieu nay tuong doi voi `frontend/`; tai lieu va
 design van o root. Doc them `docs/accounting-preview.md` cho luong thu tien.
 

@@ -7,8 +7,9 @@ import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 export function ProductBundle({ products }: { products: Product[] }) {
-  const { customer, add } = useCommerce();
+  const { customer, add, products: catalog } = useCommerce();
   const [selected, setSelected] = useState<string[]>(() => products.map((product) => product.id));
+  products = products.map((product) => catalog.find((item) => item.id === product.id)).filter((item): item is Product => Boolean(item));
 
   const toggleSelection = (id: string) => {
     setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
@@ -19,7 +20,7 @@ export function ProductBundle({ products }: { products: Product[] }) {
     <section className="mt-6">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-bold text-primary">Sản phẩm thường được mua cùng</h2>
-        <Button variant="secondary" disabled={!selected.length} onClick={addSelected}>
+        <Button variant="secondary" disabled={!products.some((product) => selected.includes(product.id))} onClick={addSelected}>
           <ShoppingCart size={16} />Thêm tất cả vào giỏ hàng
         </Button>
       </div>

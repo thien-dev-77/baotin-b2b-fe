@@ -7,12 +7,12 @@ import { useAdmin } from "@/components/admin/admin-provider";
 import { AdminHeading } from "@/components/admin/admin-ui";
 import { AdminOrderTable } from "@/components/admin/admin-order-table";
 import { AdminOrderDialog } from "@/components/admin/admin-order-dialog";
-import { adminDate, dateBefore, previewDate } from "@/lib/admin-preview";
+import { adminDate, dateBefore } from "@/lib/admin-preview";
 import { hasShortage } from "@/lib/admin-warehouse";
 import { money } from "@/lib/catalog";
 
 export function AdminDashboard() {
-  const { branch, days, scopedOrders, scopedCustomers, scopedApprovals, warehouse, warehouseOrders } = useAdmin();
+  const { branch, days, scopedOrders, scopedCustomers, scopedApprovals, warehouse, warehouseOrders, today } = useAdmin();
   const [selected, setSelected] = useState<string | null>(null);
   const valid = scopedOrders.filter((item) => item.status !== "Đã hủy");
   const pending = scopedOrders.filter((item) => item.status === "Chờ xác nhận").length;
@@ -35,13 +35,13 @@ export function AdminDashboard() {
   ];
   const step = days === 7 ? 1 : 5;
   const periods = Array.from({ length: days === 7 ? 7 : 6 }, (_, index) => {
-    const start = dateBefore(days - 1 - index * step);
-    const end = dateBefore(days - step - index * step);
+    const start = dateBefore(days - 1 - index * step, today);
+    const end = dateBefore(days - step - index * step, today);
     return { label: adminDate(start).slice(0, 5), start, end, value: valid.filter((item) => item.date >= start && item.date <= end).reduce((sum, item) => sum + item.total, 0) };
   });
   const max = Math.max(...periods.map((item) => item.value), 1);
   return <>
-    <AdminHeading title="Tổng quan vận hành" subtitle={`${branch} · ${adminDate(dateBefore(days - 1))} - ${adminDate(previewDate)}`} />
+    <AdminHeading title="Tổng quan vận hành" subtitle={`${branch} · ${adminDate(dateBefore(days - 1, today))} - ${adminDate(today)}`} />
     <div className="mb-7 grid grid-cols-2 gap-3 xl:grid-cols-4">{kpis.map(({ label, value, mobileValue, note, icon: Icon, href, color }) => <Link href={href} key={label} className="min-w-0 rounded-md border border-border bg-white p-3 transition-colors hover:border-blue-brand/40 sm:p-4"><div className="flex min-h-8 items-center justify-between gap-2"><span className="text-xs font-medium text-text-secondary">{label}</span><span className={`hidden h-8 w-8 shrink-0 items-center justify-center rounded sm:flex ${color}`}><Icon size={17} /></span></div><p className="mt-2 break-words text-xl font-bold leading-8 tabular-nums text-primary sm:mt-3 sm:text-[25px]"><span className="sm:hidden" title={value}>{mobileValue}</span><span className="hidden sm:inline">{value}</span></p><p className="mt-2 text-xs leading-5 text-text-muted">{note}</p></Link>)}</div>
     <div className="mb-7 grid gap-7 xl:grid-cols-[minmax(0,1.5fr)_minmax(260px,1fr)]">
       <section className="min-w-0 border-y border-border bg-white p-4 sm:p-5" aria-label="Biểu đồ giá trị đơn hàng">

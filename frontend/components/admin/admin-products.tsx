@@ -8,15 +8,18 @@ import { useAdmin } from "@/components/admin/admin-provider";
 import { AdminHeading, AdminPagination, AdminSearch, AdminStatus, AdminTable, useAdminFilters } from "@/components/admin/admin-ui";
 import { downloadAdminCsv } from "@/lib/admin-preview";
 import { categoryCatalog, money, normalize, type Product } from "@/lib/catalog";
+import { apiMode } from "@/lib/api-client";
+import { ProductImageUpload } from "./product-image-upload";
 
-function ProductEditor({ product, onSave }: { product: Product & { published: boolean }; onSave: (value: boolean) => void }) {
+function ProductEditor({ product, onSave }: { product: Product & { published: boolean }; onSave: (value: boolean) => Promise<void> }) {
   const [published, setPublished] = useState(product.published);
-  return <form onSubmit={(event) => { event.preventDefault(); onSave(published); }}>
+  return <form onSubmit={async (event) => { event.preventDefault(); await onSave(published); }}>
     <div className="mb-5 flex items-start gap-4">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={product.image} alt={product.name} width={96} height={96} className="h-24 w-24 shrink-0 rounded-md border border-border object-cover" />
       <div className="min-w-0"><p className="text-xs text-text-muted">{product.code} · {product.brand}</p><h3 className="mt-1 text-base font-semibold text-primary">{product.name}</h3><p className="mt-2 text-sm font-medium text-blue-brand">{money(product.price)}/{product.unit}</p></div>
     </div>
+    {apiMode && <ProductImageUpload productId={product.id} />}
     <dl className="mb-5 grid grid-cols-2 gap-4 border-y border-border py-4 text-sm"><div><dt className="text-xs text-text-muted">Danh mục</dt><dd className="mt-1">{categoryCatalog.find((item) => item.slug === product.category)?.name}</dd></div><div><dt className="text-xs text-text-muted">Tồn kho mẫu</dt><dd className="mt-1">{product.stock} {product.unit}</dd></div><div className="col-span-2"><dt className="text-xs text-text-muted">Quy cách</dt><dd className="mt-1">{product.specification}</dd></div></dl>
     <label className="flex items-center gap-3 text-sm font-medium text-primary"><input type="checkbox" checked={published} onChange={(event) => setPublished(event.target.checked)} className="h-4 w-4 accent-blue-brand" />Đang bán trên website</label>
     <div className="mt-6 flex flex-wrap justify-between gap-3 border-t border-border pt-4"><Link href={`/products/${product.slug}`} className="bt-button-secondary"><ExternalLink size={16} />Xem sản phẩm</Link><Button type="submit" disabled={published === product.published}><Save size={16} />Lưu trạng thái</Button></div>
@@ -48,6 +51,6 @@ export function AdminProducts() {
       </tr>)}
     </AdminTable>
     <AdminPagination count={rows.length} page={page} onChange={filters.setPage} />
-    <Modal open={!!product} onClose={() => setSelected(null)} title="Trạng thái sản phẩm">{product && <ProductEditor key={product.id} product={product} onSave={(value) => { setPublished(product.id, value); setSelected(null); }} />}</Modal>
+    <Modal open={!!product} onClose={() => setSelected(null)} title="Trạng thái sản phẩm">{product && <ProductEditor key={product.id} product={product} onSave={async (value) => { const error = await setPublished(product.id, value); if (!error) setSelected(null); }} />}</Modal>
   </>;
 }

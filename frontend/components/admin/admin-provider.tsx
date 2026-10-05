@@ -8,6 +8,10 @@ import { appendWarehouseEvent, hasShortage, isPicked, isWarehouseOrder, warehous
 import { validateSalesDraft, type SalesDraft } from "@/lib/admin-sales";
 import { applyApprovedPrice, approvalDecisionBlocker, approvalRejectionBlocker, buildApprovalRequest, latestOrderApprovals, type ApprovalDraft } from "@/lib/admin-approval";
 import { collectible, reconciliationBlocker, validateReceipt, validAccountingDate, type ReceiptDraft } from "@/lib/admin-accounting";
+import { apiMode } from "@/lib/api-client";
+import { ApiAdminProvider } from "./api-admin-provider";
+import { branches } from "@/lib/admin-preview";
+import type { ApiAdminState } from "../../../shared/api";
 
 function useAdminState() {
   const [overrides, setOverrides] = useState<AdminPreviewOverrides>(emptyAdminOverrides);
@@ -173,11 +177,18 @@ function useAdminState() {
     setOverrides((state) => ({ ...state, warehouse: { ...state.warehouse, [id]: { ...appendWarehouseEvent(state.warehouse?.[id], "Đã xử lý thiếu hàng", note.trim()), issue: { ...issue, resolvedAt: new Date().toISOString(), resolution: note.trim() } } } }));
     notice("Đã xử lý báo thiếu hàng mẫu.");
   }
-  return { ready, branch, setBranch, days, setDays, orders, scopedOrders, customers, scopedCustomers, approvals, scopedApprovals, products, warehouse, warehouseOrders, receipts, paymentDueDates, createReceipt, reconcileReceipt, voidReceipt, setPaymentDueDate, saveSalesOrder, createApproval, advanceOrder, cancelOrder, decideApproval, setCustomerStatus, setPublished, setPicked, reportShortage, resolveShortage, reset: () => { setOverrides(emptyAdminOverrides); notice("Đã khôi phục dữ liệu quản trị mẫu."); } };
+  return { ready, today: previewDate, allowedBranches: [...branches], branch, setBranch, days, setDays, orders, scopedOrders, customers, scopedCustomers, approvals, scopedApprovals, products, warehouse, warehouseOrders, receipts, paymentDueDates, createReceipt, reconcileReceipt, voidReceipt, setPaymentDueDate, saveSalesOrder, createApproval, advanceOrder, cancelOrder, decideApproval, setCustomerStatus, setPublished, setPicked, reportShortage, resolveShortage, reset: () => { setOverrides(emptyAdminOverrides); notice("Đã khôi phục dữ liệu quản trị mẫu."); } };
 }
 
-const AdminContext = createContext<ReturnType<typeof useAdminState> | null>(null);
+type MockValue = ReturnType<typeof useAdminState>;
+type ActionKey = "createReceipt" | "reconcileReceipt" | "voidReceipt" | "setPaymentDueDate" | "saveSalesOrder" | "createApproval" | "advanceOrder" | "cancelOrder" | "decideApproval" | "setCustomerStatus" | "setPublished" | "setPicked" | "reportShortage" | "resolveShortage" | "reset";
+type Awaitable<T> = T extends (...args: infer A) => infer R ? (...args: A) => R | Promise<R | ([R] extends [void] ? string : never)> : T;
+export type AdminValue = Omit<{ [K in keyof MockValue]: K extends ActionKey ? Awaitable<MockValue[K]> : MockValue[K] }, keyof ApiAdminState | "scopedOrders" | "scopedApprovals" | "warehouseOrders"> & ApiAdminState & { scopedOrders: ApiAdminState["orders"]; scopedApprovals: ApiAdminState["approvals"]; warehouseOrders: ApiAdminState["orders"] };
+export const AdminContext = createContext<AdminValue | null>(null);
 export function AdminProvider({ children }: { children: React.ReactNode }) {
+  return apiMode ? <ApiAdminProvider>{children}</ApiAdminProvider> : <PreviewAdminProvider>{children}</PreviewAdminProvider>;
+}
+function PreviewAdminProvider({ children }: { children: React.ReactNode }) {
   const value = useAdminState();
   return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>;
 }

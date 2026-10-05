@@ -1,10 +1,13 @@
-# Bao Tin B2B & B2C
+# Bao Tin Frontend B2B & B2C
 
-Frontend tuong tac de duyet UI truoc khi ket noi backend.
+Repo nay chi chua Next.js frontend, TypeScript, Tailwind, Inter va Lucide.
+Backend NestJS/TypeORM/JWT va media duoc quan ly rieng tai
+[baotin-b2b-be](https://github.com/thien-dev-77/baotin-b2b-be).
+Xem [Backend Integration](docs/backend-integration.md) cho contract API.
 
 ```txt
-frontend/  Next.js, components, mock, assets, QA scripts va package-lock
-backend/   Khung tai lieu cho NestJS, chua co API
+frontend/  Next.js, components, frontend adapters va Playwright
+shared/    Types va rules dung chung
 docs/      Nghiep vu, design system, quy tac UI, ban giao API
 design/    Anh thiet ke tham chieu
 ```
@@ -13,13 +16,23 @@ design/    Anh thiet ke tham chieu
 
 ```sh
 npm --prefix frontend ci
+# frontend/.env.local theo frontend/.env.example
 npm run dev -- --port 3010
 ```
 
 Website: http://localhost:3010. Quan tri: http://localhost:3010/admin.
 Thu tien va doi chieu: http://localhost:3010/admin/accounting.
-Neu server cu dang chay tu root, dung va khoi dong lai bang lenh tren.
-Deploy: dat root directory la `frontend`; chi frontend co dependencies/build.
+Frontend env: NEXT_PUBLIC_API_MODE=true, BACKEND_URL=http://127.0.0.1:4000.
+Chay API tu repo backend theo
+[backend README](https://github.com/thien-dev-77/baotin-b2b-be/blob/main/backend/README.md).
+Backend can chay cho API va anh: Next proxy /api/backend/* -> /api/*,
+/images/* -> /media/images/* va /media/* -> /media/*.
+DATABASE_URL, JWT_SECRET va SEED_PASSWORD chi o backend, khong o frontend env.
+
+`shared/` can cho frontend build, khong phai source NestJS. Types/rules duoc
+version trong ca hai repo; khi doi contract can cap nhat ca FE va BE.
+Thu muc backend/ local trong workspace hien tai duoc giu nguyen nhung ignored,
+khong duoc commit/push vao repo nay.
 
 ## Kiem Thu
 
@@ -27,12 +40,21 @@ Deploy: dat root directory la `frontend`; chi frontend co dependencies/build.
 npm run lint
 npm run build
 npm run typecheck
-QA_BASE_URL=http://localhost:3010 npm run test:accounting
-QA_BASE_URL=http://localhost:3010 npm run test:admin
-QA_BASE_URL=http://localhost:3010 npm run test:ui
 ```
 
-Cac lenh root chuyen tiep den `frontend/package.json`.
+Connected browser QA can repo backend rieng. Chay tu frontend/:
+
+```sh
+# Chi local DB + dev:local API; KHONG chay voi API Supabase
+QA_BACKEND_DIR=../../baotin-b2b-be/backend npm run test:connected
+```
+
+QA_BACKEND_DIR tro toi folder backend co package.json, dependencies va
+.env.local cua DB test. Script van ho tro workspace cu co backend/ canh
+frontend/, nhung backend khong la mot phan cua repo FE.
+API/unit tests backend chay trong repo BE, khong co script backend o root FE.
+QA preview cu chi dung API_MODE=false. Anh van can backend/media server.
+Build voi NEXT_DIST_DIR=.next-build neu dev server dang chay.
 QA browser can server dang chay va Chromium Playwright.
 Doc [frontend/README.md](frontend/README.md) de xem cac test nghiep vu.
 
@@ -46,7 +68,8 @@ Doc [frontend/README.md](frontend/README.md) de xem cac test nghiep vu.
 - [Ban giao UI va ke hoach API](docs/api-handoff.md)
 - [Thu tien va doi chieu](docs/accounting-preview.md)
 
-**Gioi han:** tat ca du lieu la mock; localStorage khong phai auth, phan quyen,
-gia/ton/no tin cay, thanh toan that hay dong bo KiotViet. Storefront va admin
-chua chung order service. Khong cong bo du lieu kinh doanh that trong demo.
-Tai lieu media ghi ro anh minh hoa va dieu kien xac minh truoc production.
+**Gioi han:** du lieu mock persisted, auth/orders/admin da noi API; chua dong bo
+KiotViet, bang gia thuc, stock ledger, credit ledger hay bank payment.
+Khong cong bo du lieu seed/secrets. Tai lieu media ghi ro anh minh hoa va
+dieu kien xac minh truoc production. Next.js 14 hien co audit high/critical,
+can upgrade va regression-test truoc deploy production.

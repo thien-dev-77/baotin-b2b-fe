@@ -7,9 +7,11 @@ import { Check, ClipboardList, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { apiMode } from "@/lib/api-client";
 
 export function useCustomerOrders() {
   const { customer, orders } = useCommerce();
+  if (apiMode) return orders;
   return customer ? [...orders.filter((order) => order.customerId === customer.id), ...(customer.status === "active" ? mockOrders(customer.id) : [])] : orders.filter((order) => !order.customerId);
 }
 export function OrderStatusBadge({ status }: { status: OrderStatus }) {
